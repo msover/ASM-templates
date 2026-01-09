@@ -1,12 +1,15 @@
 %ifndef _SLAVE_ASM_
 %define _SLAVE_ASM_
-    
+
+extern exit
+import exit msvcrt.dll
+
 segment data use32 class=data
     helloworld db "Hello World!", 0
 
 segment code use32 class=code
 
-    func1:
+    helloWorldFun:
         push ebp
         mov ebp, esp
         
@@ -15,14 +18,17 @@ segment code use32 class=code
         leave
         ret
 
-    func2:
+    exitFun:
         push ebp
         mov ebp, esp
+        
+        push 0
+        call [exit]
         
         leave
         ret
     
-    func3:
+    templateFun:
         push ebp
         mov ebp, esp
         

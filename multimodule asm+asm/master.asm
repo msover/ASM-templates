@@ -11,12 +11,11 @@ segment data use32 class=data
     
 segment code use32 class=code
     start:
-        call func1
+        call helloWorldFun
         
         push eax
         push fmt
         call [printf]
         add esp, 4 * 2
         
-        push 0
-        call [exit]
+        call exitFun
