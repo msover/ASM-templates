@@ -1,0 +1,103 @@
+     1                                  %ifndef _SLAVE_ASM_
+     2                                  %define _SLAVE_ASM_
+     3                                  
+     4                                  extern exit
+     5                                  import exit msvcrt.dll
+     6                                  segment data use32 class=data
+     7 00000000 <res 00000064>              firstBuffer resb 100
+     8                                  segment code use32 class=code
+     9                                      templateFun:
+    10 00000000 6655                            push ebp
+    11 00000002 6689E5                          mov ebp, esp
+    12                                          
+    13 00000005 C9                              leave
+    14 00000006 C3                              ret
+    15                                      
+    16                                      isLeaveCommand:
+    17 00000007 6655                            push ebp
+    18 00000009 6689E5                          mov ebp, esp
+    19 0000000C 66B800000000                    mov eax, 0
+    20 00000012 66678B542408                    mov edx, [esp + 8]
+    21 00000018 67803A6C                        cmp byte [edx], 'l'
+    22 0000001C 7522                            jnz .exitfun
+    23 0000001E 67807A0165                      cmp byte [edx + 1], 'e'
+    24 00000023 751B                            jnz .exitfun
+    25 00000025 67807A0261                      cmp byte [edx + 2], 'a'
+    26 0000002A 7514                            jnz .exitfun
+    27 0000002C 67807A0376                      cmp byte [edx + 3], 'v'
+    28 00000031 750D                            jnz .exitfun
+    29 00000033 67807A0465                      cmp byte [edx + 4], 'e'
+    30 00000038 7506                            jnz .exitfun
+    31 0000003A 66B801000000                    mov eax, 1
+    32                                          .exitfun:
+    33 00000040 C9                                  leave
+    34 00000041 C3                                  ret
+    35                                      
+    36                                      searchBuffers:
+    37 00000042 6655                            push ebp
+    38 00000044 6689E5                          mov ebp, esp
+    39 00000047 66678B4508                      mov eax, [ebp + 8]
+    40 0000004C 66BE00000000                    mov esi, 0
+    41 00000052 66BFFFFFFFFF                    mov edi, -1
+    42                                          
+    43                                          .loop1:
+    44 00000058 6647                                inc edi
+    45 0000005A 66BE00000000                        mov esi, 0
+    46                                              .loop2:
+    47 00000060 6689FB                                  mov ebx, edi
+    48 00000063 6601F3                                  add ebx, esi
+    49 00000066 678A0C18                                mov cl, [eax + ebx]
+    50 0000006A 678AAE[00000000]                        mov ch, [firstBuffer + esi]
+    51                                                  
+    52                                                  
+    53 00000071 6780BE[00000000]00                      cmp byte [firstBuffer + esi], 0
+    54 00000079 7411                                    jz .found
+    55                                                  
+    56                                                  
+    57 0000007B 67803C1800                              cmp byte [eax + ebx], 0
+    58 00000080 7412                                    jz .exitfun
+    59                                                  
+    60 00000082 38E9                                    cmp cl, ch
+    61 00000084 75D2                                    jnz .loop1
+    62 00000086 6646                                    inc esi
+    63 00000088 EBD6                                    jmp .loop2
+    64                                          
+    65                                          
+    66                                          
+    67 0000008A EB08                            jmp .exitfun
+    68                                          .found:
+    69 0000008C 66B801000000                        mov eax, 1
+    70 00000092 C9                                  leave
+    71 00000093 C3                                  ret
+    72                                          .exitfun:
+    73 00000094 66B800000000                        mov eax, 0
+    74 0000009A C9                                  leave
+    75 0000009B C3                                  ret
+    76                                          
+    77                                      hasRepeated:
+    78 0000009C 6655                            push ebp
+    79 0000009E 6689E5                          mov ebp, esp
+    80                                          
+    81 000000A1 66678B450C                      mov eax, [ebp + 12]
+    82 000000A6 6683F800                        cmp eax, 0
+    83 000000AA 7402                            jz .firstCycle
+    84 000000AC EB19                            jmp .notFirstCycle
+    85                                          .firstCycle:
+    86 000000AE 66678B7508                          mov esi, [ebp + 8]
+    87 000000B3 66BF[00000000]                      mov edi, firstBuffer
+    88                                              .loop1:
+    89 000000B9 AC                                      lodsb
+    90 000000BA AA                                      stosb
+    91 000000BB 3C00                                    cmp al, 0
+    92 000000BD 75FA                                    jnz .loop1
+    93 000000BF 66B800000000                        mov eax, 0
+    94 000000C5 EB0C                                jmp .exitfun
+    95                                              
+    96                                          .notFirstCycle:
+    97 000000C7 6667FF7508                          push dword [ebp + 8]
+    98 000000CC E873FF                              call searchBuffers
+    99 000000CF 6683C404                            add esp, 4
+   100                                          .exitfun:
+   101 000000D3 C9                                  leave
+   102 000000D4 C3                                  ret
+   103                                  %endif

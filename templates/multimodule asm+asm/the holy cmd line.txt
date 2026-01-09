@@ -1,0 +1,1 @@
+nasm -fobj master.asm && nasm -fobj slave.asm && alink master.obj slave.obj -oPE -subsys console -entry start
