@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void printmythings(char str);
+void printmythings(char str[]);
 char str[] = "Goodbye World!";
 
 
