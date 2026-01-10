@@ -1,5 +1,5 @@
 #include <stdio.h>
-void restructure(char str[]);
+char* restructure(char str[]);
 
 void readstring(char str[])
 {
@@ -11,8 +11,9 @@ int main()
 	char localstring[100];
 	printf("Enter string:\n");
 	readstring(localstring);
-	restructure(localstring);
-	printf("%s\n", localstring);
+	char* p;
+	p = restructure(localstring);
+	printf("%s", p);
 
 	return 0;
 }
