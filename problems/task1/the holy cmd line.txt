@@ -1,0 +1,13 @@
+nasm slave1.asm -fwin32 -g -o slave1.obj && nasm slave2.asm -fwin32 -g -o slave2.obj && cl /Z7 main.c /link slave1.obj slave2.obj legacy_stdio_definitions.lib 
+
+**************************
+INSTRUCTIONS FOR DEBUGGING
+**************************
+
+open master.exe in ollydbg.
+ctrl+n -> search for _functionNameInSlave
+ENTER
+click any instruction inside _functionNameInSlave
+F2
+F9
+debug as usual.
