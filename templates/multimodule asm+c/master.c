@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void printmythings(int str);
+void printmythings(char str);
 char str[] = "Goodbye World!";
 
 
@@ -11,7 +11,7 @@ int main()
 	return 0;
 }
 
-void readstring(int str)
+void readstring(char str[])
 {
 	scanf("%s", str);
 }
