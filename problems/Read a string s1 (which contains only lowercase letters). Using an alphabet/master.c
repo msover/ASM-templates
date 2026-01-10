@@ -1,17 +1,19 @@
 #include <stdio.h>
-
-void printmythings(char str[]);
-char str[] = "Goodbye World!";
-
-
-int main()
-{
-	char localstring[] = "Hello World!\n";
-	printmythings(localstring);
-	return 0;
-}
+void restructure(char str[]);
 
 void readstring(char str[])
 {
 	scanf("%s", str);
 }
+
+int main()
+{
+	char localstring[100];
+	printf("Enter string:\n");
+	readstring(localstring);
+	restructure(localstring);
+	printf("%s\n", localstring);
+
+	return 0;
+}
+

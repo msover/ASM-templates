@@ -1,23 +1,38 @@
 bits 32
-extern _printf          ;_printf already exsists inside <stdio.h>
-extern _str             ;intended for use only inside slave
-global _printmythings   ;intended for use inside both slave and master
-                        ;readstring method is not needed in this module
+global _restructure
 segment data public data use32
-	message db 'Hello world!', 0
+	alphabet db '12345678901234567890123456', 0
+    newstring resb 100
     
 segment code public code use32
-    _printmythings:
+    _restructure:
         push ebp
         mov ebp,esp
+        pushad
+       
+        mov esi, [ebp + 8]
+        mov edi, newstring
+        xor ecx, ecx
+        .mainloop:
+            xor eax, eax
+            xor edx, edx
+            lodsb
+            sub al, 'a'
+            mov dl, [alphabet + eax]
+            mov al, dl
+            stosb
+            cmp al, 0
+            jz .exitfun
+            jmp .mainloop
         
-        push dword [esp + 8]
-        call _printf
-        add esp, 4 * 1
-        
-        push _str
-        call _printf
-        add esp, 4 * 1
-        
-        leave
-        ret
+        .exitfun:
+            mov esi, newstring
+            mov edi, [ebp + 8]
+            .secondloop:
+                lodsb
+                stosb
+                cmp al, 0
+                jnz .secondloop
+            popad
+            leave
+            ret
